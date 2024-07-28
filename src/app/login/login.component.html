@@ -1,0 +1,36 @@
+<form>
+  <div class="form-group">
+    <h3>Login do sistema</h3>
+  </div>
+  <div class="form-group">
+    <label for="login">Login:</label>
+    <input type="text" class="form-control" #userLogin="ngModel" [(ngModel)] = "usuario.login" id="login" name="login" placeholder="" required>
+    <div *ngIf="submitted && userLogin.invalid" class="alert alert-danger">
+      Login deve ser informado.
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="senha">Senha:</label>
+    <input type="password" class="form-control" #senha="ngModel" [(ngModel)] = "usuario.senha"  id="senha" name="senha" placeholder="" required>
+    <div *ngIf="submitted && senha.invalid" class="alert alert-danger">
+      Senha deve ser informada.
+    </div>
+  </div>
+  
+  <button type="button" class="btn btn-primary" (click)="login()">Acessar</button>
+
+</form>
+
+
+
+<!-- 
+  #userLogin="ngModel":   Cria uma referência local chamada userLogin para o elemento <input>.
+                          Essa referência pode ser usada em outras partes do template para acessar
+                          as propriedades e métodos desse elemento.
+
+  [(ngModel)]="usuario.login":   Diretiva Angular que cria uma ligação bidirecional de dados entre a propriedade
+                                 login do objeto usuario e o valor do elemento <input>.
+                                A ligação bidirecional significa que qualquer alteração no valor do campo de
+                                entrada será refletida no objeto usuario.login e vice-versa.                    
+-->
+

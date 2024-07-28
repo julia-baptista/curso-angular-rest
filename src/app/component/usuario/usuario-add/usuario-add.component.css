@@ -1,0 +1,18 @@
+
+label, span {
+  display: inline-block;
+  vertical-align: middle;
+  height: 24px
+
+}
+
+label {
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+span {
+  margin-left: 3px;
+  margin-bottom: 12px;
+}
+

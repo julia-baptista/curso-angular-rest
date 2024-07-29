@@ -42,6 +42,10 @@ export class UsuarioService {
 
   }
 
+  consultarUserPorPage(nome: String, page : Number): Observable<any> {
+    return this.http.get(AppConstants.baseUrl + "usuarioPorNome/" + nome + "/page/" + page);
+  }
+
   salvarUsuario(user) : Observable<any> {
     return this.http.post<any>(AppConstants.baseUrl, user);
   }

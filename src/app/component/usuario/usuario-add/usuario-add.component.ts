@@ -19,7 +19,7 @@ export class UsuarioAddComponent implements OnInit {
   telefone = new Telefone();
 
   ngOnInit() {
-    69949843030
+  
     let id = this.routeActive.snapshot.paramMap.get('id');
 
     if (id != null) {
@@ -30,6 +30,7 @@ export class UsuarioAddComponent implements OnInit {
   }
 
   salvarUser() {
+
     if(this.usuario.id != null && this.usuario.id.toString().trim() != null) {
       this.userService.updateUsuario(this.usuario).subscribe(data => {
         console.info("User Atualizado: " + data);

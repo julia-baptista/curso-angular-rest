@@ -41,18 +41,38 @@ export class UsuarioComponent implements OnInit {
   }
 
   consultarUser() {
-    this.usuarioService.consultarUser(this.nome).subscribe(data => {
-      console.log("data: " + data.content)
-      this.students = data.content;
-      this.total = data.totalElements;
-    })
+
+    if(this.nome === "") {
+      this.usuarioService.getStudentList().subscribe(data => {
+        this.students = data.content;
+        this.total = data.totalElements;
+      });
+    } else {
+      this.usuarioService.consultarUser(this.nome).subscribe(data => {
+        console.log("data: " + data.content)
+        this.students = data.content;
+        this.total = data.totalElements;
+      })
+    }
+
   }
 
   carregarPagina(pagina) {
-    this.usuarioService.getStudentListPage(pagina -1).subscribe(data => {
-      this.students = data.content;
-      this.total = data.totalElements;
-    });
+
+    if(this.nome !== "") {
+      this.usuarioService.consultarUserPorPage(this.nome, (pagina - 1)).subscribe(data => {
+        this.students = data.content;
+        this.total = data.totalElements;
+      })
+    } else {
+      this.usuarioService.getStudentListPage(pagina -1).subscribe(data => {
+        this.students = data.content;
+        this.total = data.totalElements;
+      });
+
+    }
+
+
   }
 
 }

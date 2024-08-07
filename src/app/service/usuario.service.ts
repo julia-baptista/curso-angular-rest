@@ -13,37 +13,31 @@ export class UsuarioService {
   constructor(private http: HttpClient, private router : Router) { }
 
   getStudentList() : Observable<any> {
-
     return this.http.get<any>(AppConstants.baseUrl);
+  }
 
+  getProfissaoList(): Observable<any> {
+    return this.http.get<any>(AppConstants.getBaseUrlPath + 'profissao/');
   }
 
   getStudentListPage(pagina) : Observable<any> {
-
     return this.http.get<any>(AppConstants.baseUrl + 'page/' + pagina );
-
   }
 
   getStudent(id): Observable<any> {
-
     return this.http.get<any>(AppConstants.baseUrl + "v2/" + id);
-
   }
 
   deletarUsuario(id: Number) : Observable<any> {
-
     return this.http.delete(AppConstants.baseUrl + id, {responseType: 'text'}); 
-
   }
 
   consultarUser(nome: String) :  Observable<any> {
-
     return this.http.get<any>(AppConstants.baseUrl + "usuarioPorNome/" + nome);
-
   }
 
   consultarUserPorPage(nome: String, page : Number): Observable<any> {
-    return this.http.get(AppConstants.baseUrl + "usuarioPorNome/" + nome + "/page/" + page);
+    return this.http.get(AppConstants.baseUrl + "usuarioPorNomePage/" + nome + "/page/" + page);
   }
 
   salvarUsuario(user) : Observable<any> {

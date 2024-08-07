@@ -15,6 +15,9 @@ import { UsuarioAddComponent } from './component/usuario/usuario-add/usuario-add
 import { GuardiaoGuard } from './service/guardiao.guard';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxCurrencyModule } from 'ngx-currency';
+
 
 export const appRoutes: Routes = [
   {path: 'home', component: HomeComponent, canActivate: [GuardiaoGuard]},
@@ -45,7 +48,9 @@ export const optionsMask: Partial<IConfig> | (() => Partial<IConfig>) = {};
     routes,
     HttpInterceptorModule,
     NgxMaskModule.forRoot(optionsMask),
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgbModule,
+    NgxCurrencyModule
   ],
   providers: [],
   bootstrap: [AppComponent]

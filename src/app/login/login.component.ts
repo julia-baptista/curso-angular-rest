@@ -22,13 +22,15 @@ export class LoginComponent implements OnInit {
 
   submitted = false;
 
-  
-
   public login() {
     this.submitted = true;
     if (this.usuario.login && this.usuario.senha) {
       this.loginService.login(this.usuario);
     }
+  }
+
+  public recuperar() {
+    this.loginService.recuperar(this.usuario.login);
   }
 
 }

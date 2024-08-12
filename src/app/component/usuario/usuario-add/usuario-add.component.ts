@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Telefone } from 'src/app/model/telefone';
 import { NgbDateParserFormatter, NgbDateStruct, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { Profissao } from 'src/app/model/Profissao';
+import { FormGroup } from '@angular/forms';
 
 
 /**
@@ -14,22 +15,28 @@ import { Profissao } from 'src/app/model/Profissao';
 @Injectable()
 export class FormatDateAdapter extends NgbDateAdapter<string> {
 	
-  readonly DELIMITER = '/';
+  readonly DELIMITER = '-';
 
 	fromModel(value: string | null): NgbDateStruct | null {
 		if (value) {
 			const date = value.split(this.DELIMITER);
+      console.log(parseInt(date[0], 10));
 			return {
-				day: parseInt(date[0], 10),
+				year: parseInt(date[0], 10),
 				month: parseInt(date[1], 10),
-				year: parseInt(date[2], 10),
+				day: parseInt(date[2], 10),
 			};
 		}
 		return null;
 	}
 
 	toModel(date: NgbDateStruct | null): string | null {
-		return date ? date.day + this.DELIMITER + date.month + this.DELIMITER + date.year : null;
+    if (!date) {
+      return null;
+    }
+    console.log(`${date.year}-${validarDia(date.month)}-${validarDia(date.day)}`);
+		// Return date in 'yyyy-MM-dd' format
+    return `${date.year}-${validarDia(date.month)}-${validarDia(date.day)}`;
 	}
 }
 
@@ -45,6 +52,7 @@ export class FormataData extends NgbDateParserFormatter {
 	parse(value: string): NgbDateStruct | null {
 		if (value) {
 			const date = value.split(this.DELIMITER);
+
 			return {
 				day: parseInt(date[0], 10),
 				month: parseInt(date[1], 10),
@@ -60,7 +68,9 @@ export class FormataData extends NgbDateParserFormatter {
 	}
 
   toModel(date: NgbDateStruct | null): string | null {
-		return date ? date.day + this.DELIMITER + date.month + this.DELIMITER + date.year : null;
+
+    // Return date in 'yyyy-MM-dd' format
+    return `${date.year}-${validarDia(date.month)}-${validarDia(date.day)}`;
 	}
 
 }
@@ -86,6 +96,7 @@ export class UsuarioAddComponent implements OnInit {
 
   constructor(private routeActive: ActivatedRoute, private userService : UsuarioService, private router : Router) { }
 
+  yourForm: FormGroup;
   usuario = new User();
   submitted = false;
   telefone = new Telefone();
@@ -107,14 +118,17 @@ export class UsuarioAddComponent implements OnInit {
   }
 
   salvarUser() {
-
+    console.log(this.usuario);
     if(this.usuario.id != null && this.usuario.id.toString().trim() != null) {
+      
       this.userService.updateUsuario(this.usuario).subscribe(data => {
         console.info("User Atualizado: " + data);
+        this.handleUserUpdate(data);
       })
     } else {
       this.userService.salvarUsuario(this.usuario).subscribe(data => {
         console.info("Gravou User: " + data);
+        this.handleUserUpdate(data);
       })
     }
 
@@ -123,10 +137,36 @@ export class UsuarioAddComponent implements OnInit {
     if (id != null) {
       this.userService.getStudent(id).subscribe(data => {
         this.usuario = data;
+        this.updateFormWithUserData();
       })
     }
 
     this.submitted = true;
+  }
+
+  handleUserUpdate(data: any) {
+    // Assuming `data` contains the updated user data including date information
+    this.usuario = data;
+    this.updateFormWithUserData();
+  }
+  
+  // Update form control with user data
+  updateFormWithUserData() {
+    // Update form control with the new date value if `usuario` has a date property
+    if (this.usuario && this.usuario.dataNascimento) {
+      const formattedDate: NgbDateStruct = this.parseDateFromModel(this.usuario.dataNascimento);
+      const dateControl = this.yourForm.get('dataNascimento');
+      if (dateControl) {
+        dateControl.setValue(formattedDate);
+      }
+    }
+  }
+  
+  // Helper function to convert 'yyyy-MM-dd' date string to NgbDateStruct
+  parseDateFromModel(dateString: string): NgbDateStruct {
+    // Convert 'yyyy-MM-dd' to NgbDateStruct with 'dd/MM/yyyy' format
+    const [year, month, day] = dateString.split('-').map(num => parseInt(num, 10));
+    return { day, month, year };
   }
 
   deletarTelefone(id, i) {

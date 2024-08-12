@@ -9,7 +9,7 @@ export class User {
   nome : String;
   senha: String;
   cpf : String;
-  dataNascimento: String;
+  dataNascimento: string;
 
   profissao: Profissao = new Profissao();
 

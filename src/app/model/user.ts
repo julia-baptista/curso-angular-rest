@@ -13,7 +13,10 @@ export class User {
 
   profissao: Profissao = new Profissao();
 
-  salario: DoubleRange;
+  // salario: DoubleRange;
+
+
+  salario: number;
 
   telefones: Array<Telefone>;
   roles: Array<Role>;

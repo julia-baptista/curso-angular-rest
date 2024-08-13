@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Telefone } from 'src/app/model/telefone';
 import { NgbDateParserFormatter, NgbDateStruct, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { Profissao } from 'src/app/model/Profissao';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 
 /**
@@ -20,7 +20,6 @@ export class FormatDateAdapter extends NgbDateAdapter<string> {
 	fromModel(value: string | null): NgbDateStruct | null {
 		if (value) {
 			const date = value.split(this.DELIMITER);
-      console.log(parseInt(date[0], 10));
 			return {
 				year: parseInt(date[0], 10),
 				month: parseInt(date[1], 10),
@@ -34,7 +33,6 @@ export class FormatDateAdapter extends NgbDateAdapter<string> {
     if (!date) {
       return null;
     }
-    console.log(`${date.year}-${validarDia(date.month)}-${validarDia(date.day)}`);
 		// Return date in 'yyyy-MM-dd' format
     return `${date.year}-${validarDia(date.month)}-${validarDia(date.day)}`;
 	}
@@ -94,9 +92,20 @@ function validarDia(valor) {
 })
 export class UsuarioAddComponent implements OnInit {
 
-  constructor(private routeActive: ActivatedRoute, private userService : UsuarioService, private router : Router) { }
+  constructor(private routeActive: ActivatedRoute, private userService : UsuarioService, private router : Router, private fb: FormBuilder) {
+    this.myForm = this.fb.group({
+      dataNascimento: ['']
+    });
 
-  yourForm: FormGroup;
+    this.usuario.salario = 0;
+
+    this.myForm = this.fb.group({
+      salario: [this.usuario.salario]
+    });
+    
+   }
+
+  myForm: FormGroup;
   usuario = new User();
   submitted = false;
   telefone = new Telefone();
@@ -118,16 +127,14 @@ export class UsuarioAddComponent implements OnInit {
   }
 
   salvarUser() {
-    console.log(this.usuario);
+
     if(this.usuario.id != null && this.usuario.id.toString().trim() != null) {
       
       this.userService.updateUsuario(this.usuario).subscribe(data => {
-        console.info("User Atualizado: " + data);
         this.handleUserUpdate(data);
       })
     } else {
       this.userService.salvarUsuario(this.usuario).subscribe(data => {
-        console.info("Gravou User: " + data);
         this.handleUserUpdate(data);
       })
     }
@@ -155,7 +162,7 @@ export class UsuarioAddComponent implements OnInit {
     // Update form control with the new date value if `usuario` has a date property
     if (this.usuario && this.usuario.dataNascimento) {
       const formattedDate: NgbDateStruct = this.parseDateFromModel(this.usuario.dataNascimento);
-      const dateControl = this.yourForm.get('dataNascimento');
+      const dateControl = this.myForm.get('dataNascimento');
       if (dateControl) {
         dateControl.setValue(formattedDate);
       }
@@ -190,6 +197,7 @@ export class UsuarioAddComponent implements OnInit {
   }
 
   addFone() {
+
     if(this.usuario.telefones === undefined) {
       this.usuario.telefones = new Array<Telefone>();
     }

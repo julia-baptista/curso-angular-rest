@@ -17,6 +17,7 @@ import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxCurrencyModule } from 'ngx-currency';
+import { ReactiveFormsModule } from '@angular/forms'; 
 
 
 export const appRoutes: Routes = [
@@ -50,7 +51,8 @@ export const optionsMask: Partial<IConfig> | (() => Partial<IConfig>) = {};
     NgxMaskModule.forRoot(optionsMask),
     NgxPaginationModule,
     NgbModule,
-    NgxCurrencyModule
+    NgxCurrencyModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
